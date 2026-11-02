@@ -2,7 +2,7 @@
 
 An internal operations platform built with Laravel 13 and MySQL. Employees raise operational requests (access, infrastructure, incidents, compliance reviews, billing issues and more), and operations staff move them through a controlled, auditable lifecycle.
 
-## Features (implemented)
+## Features 
 
 - **Token authentication** with Laravel Sanctum. Login is rate-limited and returns the same error whether the email is unknown or the password is wrong.
 - **Three roles**: `employee`, `manager` and `admin`, enforced server-side by a Laravel Policy.
