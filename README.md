@@ -114,16 +114,6 @@ All endpoints are under `/api` and return JSON. Everything except login requires
 | POST | `/requests/{id}/complete` | `in_progress → completed` (optional `reason`) |
 | POST | `/requests/{id}/assign` | Assign to a manager or admin (`assignee_id`, optional `note`) |
 
-### Error format
-
-| Status | When | Body |
-| --- | --- | --- |
-| 401 | Missing or invalid token | `{"message": "Unauthenticated."}` |
-| 403 | Policy denies the action | `{"message": "..."}` |
-| 404 | Unknown resource | `{"message": "Resource not found.", "error": "not_found"}` |
-| 409 | Invalid workflow transition | `{"message", "error": "invalid_status_transition", "current_status", "requested_status", "allowed_transitions"}` |
-| 422 | Validation failure | `{"message", "errors": {"field": ["..."]}}` |
-| 429 | Rate limit exceeded | `{"message": "Too Many Attempts."}` |
 
 ## Running locally
 
@@ -187,17 +177,3 @@ curl -s "localhost:8000/api/requests?status=under_review&priority=high" -H "Auth
 
 PHP 8.4 · Laravel 13 · Laravel Sanctum · MySQL 8.4 · Redis 7 (provisioned; used from Phase 2) · PHPUnit 12 · Laravel Pint · Docker Compose
 
-## Roadmap
-
-**Phase 2: AI, Redis and async processing (not yet implemented)**
-
-- `AIRequestAnalyzerInterface` with an OpenAI-backed implementation and a deterministic local analyzer, used automatically when no API key is configured
-- `AnalyzeOperationalRequestJob`, dispatched on submit over a Redis queue with retries and backoff. It produces category, priority, summary, suggested team, risk level and suggested action, stored in an `ai_analyses` table
-- Redis-cached operational statistics with invalidation on request changes
-- Audit log (`audit_logs`) for created, submitted, assigned, approved, rejected and completed events
-- Request comments
-
-**Phase 3: dashboard and hardening (not yet implemented)**
-
-- Blade dashboard: my requests, all requests, the manager review queue, request details with AI analysis and history, and an admin overview
-- Security, query and index review; final README polish
