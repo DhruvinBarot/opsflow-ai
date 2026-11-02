@@ -11,6 +11,7 @@ use Illuminate\Http\Request;
 use Illuminate\Http\Response;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Validation\ValidationException;
+use Laravel\Sanctum\PersonalAccessToken;
 
 class AuthController extends Controller
 {
@@ -41,11 +42,18 @@ class AuthController extends Controller
     }
 
     /**
-     * Revoke only the token used for this request.
+     * Revoke only the token used for this request. Cookie-authenticated (SPA) callers have
+     * a TransientToken instead and must log out through the web session route.
      */
     public function logout(Request $request): Response
     {
-        $request->user()->currentAccessToken()->delete();
+        $token = $request->user()->currentAccessToken();
+
+        if (! $token instanceof PersonalAccessToken) {
+            abort(400, 'Session-authenticated clients log out via POST /logout.');
+        }
+
+        $token->delete();
 
         return response()->noContent();
     }

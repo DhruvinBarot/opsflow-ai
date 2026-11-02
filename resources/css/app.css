@@ -3,7 +3,219 @@
 @source '../../vendor/laravel/framework/src/Illuminate/Pagination/resources/views/*.blade.php';
 @source '../../storage/framework/views/*.php';
 
+/* Ledger design system. Semantic tokens only: components never use raw palette colors,
+   so the .dark block below re-themes everything. */
+@custom-variant dark (&:where(.dark, .dark *));
+
 @theme {
-    --font-sans: 'Instrument Sans', ui-sans-serif, system-ui, sans-serif, 'Apple Color Emoji', 'Segoe UI Emoji',
-        'Segoe UI Symbol', 'Noto Color Emoji';
+    --font-sans: 'Geist', ui-sans-serif, system-ui, -apple-system, 'Segoe UI', sans-serif;
+    --font-mono: 'Geist Mono', ui-monospace, SFMono-Regular, Menlo, monospace;
+
+    --color-canvas: #f7f8fa;
+    --color-surface: #ffffff;
+    --color-subtle: #f1f4f8;
+    --color-ink: #0f172a;
+    --color-ink-soft: #334155;
+    --color-muted: #52607a;
+    --color-line: #e2e6ee;
+    --color-line-strong: #cbd2de;
+
+    --color-primary: #1d4ed8;
+    --color-primary-hover: #1e40af;
+    --color-primary-ink: #1d4ed8;
+    --color-primary-soft: #eef3ff;
+    --color-on-primary: #ffffff;
+
+    --color-ai: #0e7490;
+    --color-ai-soft: #effafc;
+    --color-ai-line: #bfe3ec;
+
+    --color-ok: #047857;
+    --color-ok-soft: #ecfdf5;
+    --color-warn: #b45309;
+    --color-warn-soft: #fffbeb;
+    --color-danger: #b91c1c;
+    --color-danger-soft: #fef2f2;
+    --color-info: #1d4ed8;
+    --color-info-soft: #eef3ff;
+
+    --radius-card: 12px;
+    --radius-control: 8px;
+    --shadow-card: 0 1px 2px rgb(15 23 42 / 0.04);
+    --shadow-pop: 0 12px 32px -8px rgb(15 23 42 / 0.18), 0 2px 6px rgb(15 23 42 / 0.06);
+}
+
+.dark {
+    --color-canvas: #0b0f17;
+    --color-surface: #111722;
+    --color-subtle: #161d2a;
+    --color-ink: #e6eaf2;
+    --color-ink-soft: #c3cad8;
+    --color-muted: #8f9bb1;
+    --color-line: #232c3b;
+    --color-line-strong: #344055;
+
+    --color-primary: #3b5bdb;
+    --color-primary-hover: #4c6ef5;
+    --color-primary-ink: #8ea8ff;
+    --color-primary-soft: #18223d;
+
+    --color-ai: #5fcde4;
+    --color-ai-soft: #0d1d26;
+    --color-ai-line: #1e3f4c;
+
+    --color-ok: #4ade80;
+    --color-ok-soft: #0f2419;
+    --color-warn: #fbbf24;
+    --color-warn-soft: #2a200d;
+    --color-danger: #f87171;
+    --color-danger-soft: #2b1315;
+    --color-info: #8ea8ff;
+    --color-info-soft: #18223d;
+
+    --shadow-card: 0 1px 2px rgb(0 0 0 / 0.3);
+    --shadow-pop: 0 16px 40px -8px rgb(0 0 0 / 0.6);
+    color-scheme: dark;
+}
+
+@layer base {
+    html {
+        -webkit-font-smoothing: antialiased;
+        text-rendering: optimizeLegibility;
+    }
+
+    body {
+        @apply bg-canvas text-ink font-sans text-[15px] leading-6;
+    }
+
+    h1, h2, h3 {
+        text-wrap: balance;
+    }
+
+    :focus-visible {
+        outline: 2px solid var(--color-primary);
+        outline-offset: 2px;
+    }
+
+    [x-cloak] {
+        display: none !important;
+    }
+
+    @media (prefers-reduced-motion: reduce) {
+        *, *::before, *::after {
+            animation-duration: 0.01ms !important;
+            transition-duration: 0.01ms !important;
+        }
+    }
+}
+
+@layer components {
+    .card {
+        @apply rounded-(--radius-card) border border-line bg-surface shadow-(--shadow-card);
+    }
+
+    .card-header {
+        @apply flex items-center justify-between gap-3 border-b border-line px-4 py-3;
+    }
+
+    .card-title {
+        @apply text-sm font-semibold text-ink;
+    }
+
+    .eyebrow {
+        @apply font-mono text-[11px] font-medium uppercase tracking-[0.08em] text-muted;
+    }
+
+    /* Buttons: one primary per view, secondary for alternatives, ghost for tertiary, danger for irreversible. */
+    .btn {
+        @apply inline-flex min-h-9 items-center justify-center gap-2 rounded-(--radius-control) border px-3.5 text-sm font-medium whitespace-nowrap transition-colors duration-150 disabled:cursor-not-allowed disabled:opacity-50;
+    }
+
+    .btn-primary {
+        @apply border-primary bg-primary text-on-primary hover:border-primary-hover hover:bg-primary-hover;
+    }
+
+    .btn-secondary {
+        @apply border-line-strong bg-surface text-ink hover:bg-subtle;
+    }
+
+    .btn-ghost {
+        @apply border-transparent bg-transparent text-ink-soft hover:bg-subtle hover:text-ink;
+    }
+
+    .btn-danger {
+        @apply border-danger bg-danger text-white hover:opacity-90;
+    }
+
+    .btn-sm {
+        @apply min-h-8 px-2.5 text-[13px];
+    }
+
+    .field-label {
+        @apply mb-1.5 block text-sm font-medium text-ink;
+    }
+
+    .field-hint {
+        @apply mt-1.5 text-[13px] text-muted;
+    }
+
+    .field-error {
+        @apply mt-1.5 text-[13px] font-medium text-danger;
+    }
+
+    .input {
+        @apply block w-full rounded-(--radius-control) border border-line-strong bg-surface px-3 py-2 text-sm text-ink placeholder:text-muted transition-colors focus:border-primary focus:outline-none focus:ring-3 focus:ring-primary/20 aria-invalid:border-danger aria-invalid:ring-danger/15;
+    }
+
+    .pill {
+        @apply inline-flex items-center gap-1.5 rounded-full px-2 py-0.5 text-xs font-medium whitespace-nowrap;
+    }
+
+    .pill::before {
+        content: '';
+        @apply size-1.5 rounded-full bg-current;
+    }
+
+    .tone-neutral { @apply bg-subtle text-ink-soft; }
+    .tone-info { @apply bg-info-soft text-info; }
+    .tone-ok { @apply bg-ok-soft text-ok; }
+    .tone-warn { @apply bg-warn-soft text-warn; }
+    .tone-danger { @apply bg-danger-soft text-danger; }
+    .tone-ai { @apply bg-ai-soft text-ai; }
+
+    .mono-id {
+        @apply font-mono text-xs text-muted tabular-nums;
+    }
+
+    .table {
+        @apply w-full border-collapse text-sm;
+    }
+
+    .table th {
+        @apply border-b border-line px-4 py-2.5 text-left text-xs font-medium whitespace-nowrap text-muted;
+    }
+
+    .table td {
+        @apply border-b border-line px-4 py-3 align-middle;
+    }
+
+    .table tbody tr:last-child td {
+        @apply border-b-0;
+    }
+
+    .table tbody tr {
+        @apply transition-colors hover:bg-subtle/60;
+    }
+
+    .nav-link {
+        @apply flex min-h-9 items-center gap-2.5 rounded-(--radius-control) px-2.5 text-sm font-medium text-ink-soft transition-colors hover:bg-subtle hover:text-ink;
+    }
+
+    .nav-link[aria-current='page'] {
+        @apply bg-primary-soft text-primary-ink;
+    }
+
+    .skeleton {
+        @apply animate-pulse rounded-md bg-subtle;
+    }
 }

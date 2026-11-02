@@ -27,6 +27,7 @@ class OperationalRequestResource extends JsonResource
             'creator' => UserResource::make($this->whenLoaded('creator')),
             'assignee' => UserResource::make($this->whenLoaded('assignee')),
             'assignments' => RequestAssignmentResource::collection($this->whenLoaded('assignments')),
+            'ai_analysis' => AIAnalysisResource::make($this->whenLoaded('aiAnalysis')),
             'due_at' => $this->due_at?->toIso8601String(),
             'submitted_at' => $this->submitted_at?->toIso8601String(),
             'completed_at' => $this->completed_at?->toIso8601String(),

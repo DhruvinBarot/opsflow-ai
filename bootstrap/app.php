@@ -14,7 +14,9 @@ return Application::configure(basePath: dirname(__DIR__))
         health: '/up',
     )
     ->withMiddleware(function (Middleware $middleware): void {
-        //
+        // Lets the browser UI call /api/* with its session cookie (CSRF-protected), alongside bearer tokens.
+        $middleware->statefulApi();
+        $middleware->redirectUsersTo(fn () => route('app.overview'));
     })
     ->withExceptions(function (Exceptions $exceptions): void {
         $exceptions->shouldRenderJsonWhen(

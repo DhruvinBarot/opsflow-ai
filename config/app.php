@@ -15,6 +15,9 @@ return [
 
     'name' => env('APP_NAME', 'Laravel'),
 
+    // Public source repository, linked from the landing page when set.
+    'repository_url' => env('APP_REPOSITORY_URL'),
+
     /*
     |--------------------------------------------------------------------------
     | Application Environment

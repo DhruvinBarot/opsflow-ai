@@ -28,6 +28,8 @@ class ListOperationalRequestsRequest extends FormRequest
             'assigned_to' => ['sometimes', 'integer'],
             'created_by' => ['sometimes', 'integer'],
             'per_page' => ['sometimes', 'integer', 'between:1,100'],
+            'search' => ['sometimes', 'string', 'max:100'],
+            'sort' => ['sometimes', Rule::in(['newest', 'oldest', 'priority', 'due_soon'])],
         ];
     }
 }

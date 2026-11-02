@@ -79,6 +79,22 @@ class OperationalRequestPolicy
         return $user->isOperations();
     }
 
+    /**
+     * Anyone who can see a request can discuss it.
+     */
+    public function comment(User $user, OperationalRequest $request): bool
+    {
+        return $this->view($user, $request);
+    }
+
+    /**
+     * The audit trail includes reviewer reasons and AI risk metadata, so it is operations-only.
+     */
+    public function viewActivity(User $user, OperationalRequest $request): bool
+    {
+        return $user->isOperations();
+    }
+
     private function owns(User $user, OperationalRequest $request): bool
     {
         return $request->created_by === $user->id;
