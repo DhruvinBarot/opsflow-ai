@@ -5,6 +5,7 @@ An internal operations platform built with Laravel 13, MySQL and Redis. Employee
 > **Status: all three phases complete.** The backend (workflow engine, RBAC, REST API, AI analysis pipeline, Redis queue and cache, comments, audit log) and a web interface (landing page, dashboard, request management, review queue, operations console) are implemented and tested. This README only describes what exists today; see [Known limitations](#known-limitations).
 
 ## Features (implemented)
+## Features 
 
 **Core workflow (Phase 1)**
 
@@ -374,4 +375,8 @@ Tests run on in-memory SQLite with the `sync` queue and `array` cache (see `phpu
 
 ## Tech stack
 
+HEAD
 PHP 8.4 · Laravel 13 · Laravel Sanctum · MySQL 8.4 · Redis 7 · Blade · Alpine.js 3 · Tailwind CSS 4 · Vite · PHPUnit 12 · Laravel Pint · Docker Compose
+PHP 8.4 · Laravel 13 · Laravel Sanctum · MySQL 8.4 · Redis 7 (provisioned; used from Phase 2) · PHPUnit 12 · Laravel Pint · Docker Compose
+
+ 
